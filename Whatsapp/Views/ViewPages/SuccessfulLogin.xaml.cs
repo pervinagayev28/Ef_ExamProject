@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatAppModelsLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,6 +50,8 @@ namespace Whatsapp.Views.ViewPages
 
         private void MouseLeft(object sender, MouseEventArgs e) =>
             MouseLeftBtn.Command.Execute(sender as MediaElement);
+
+       
     }
 }
 

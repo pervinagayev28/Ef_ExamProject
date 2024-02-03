@@ -12,36 +12,21 @@ using System.Threading.Tasks;
 
 namespace ChatAppModelsLibrary.Models
 {
-    public class User: ServiceINotifyPropertyChanged, IPrimaryKey<int>
+    public class User:  IPrimaryKey<int>
     {
         public int Id { get; set; }
 
         public string Password { get; set; } = null!;
         public string? Bio { get; set; } = null!;
-        public string Gmail { get => gmail; set { gmail = value; OnPropertyChanged(); } }
+        public string Gmail { get; set; }
 
-        public string? ImagePath { get => imagePath; set { imagePath = value; OnPropertyChanged(); } }
+        public string? ImagePath { get; set; }
 
         public virtual ICollection<Message>? MessagesTo { get; set; }
 
         public virtual ICollection<Message>? MessagesFroms { get; set; }
         public virtual ICollection<UserConnection>? ConnectionTos { get; set; }
         public virtual ICollection<UserConnection>? ConnectionFroms { get; set; }
-        public virtual ICollection<Status>? Status { get => status; set { status = value; OnPropertyChanged(); } }
-
-
-
-        //Not mapped propts.
-        [NotMapped]
-        public string? LastMessage { get => lastMessage; set { lastMessage = value; OnPropertyChanged(); } }
-        private string? lastMessage;
-        [NotMapped]
-        public DateTime? LastMessageDate { get => lastMessageDate; set { lastMessageDate = value; OnPropertyChanged(); } }
-        private DateTime? lastMessageDate;
-
-        //back fields
-        private string gmail = null!;
-        private string? imagePath;
-        private ICollection<Status>? status;
+        public virtual ICollection<Status>? Status { get; set; }
     }
 }

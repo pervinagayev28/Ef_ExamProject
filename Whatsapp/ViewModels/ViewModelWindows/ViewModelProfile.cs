@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Whatsapp.Commands;
+using Whatsapp.Dtos;
 using Whatsapp.UnitOfWorks.BaseUnitOfWorks;
 
 namespace Whatsapp.ViewModels.ViewModelWindows
@@ -28,11 +29,11 @@ namespace Whatsapp.ViewModels.ViewModelWindows
         public ICommand? CloseCommand { get; set; }
         public ICommand? CommandGetImage { get; set; }
         public ICommand? CloseOpenedImageCommand { get; set; }
-        private User? user;
-        public User? User { get => user; set { user = value; OnPropertyChanged(); } }
+        private UserDto? user;
+        public UserDto? User { get => user; set { user = value; OnPropertyChanged(); } }
 
         private readonly IUnitOfWork unitOfWork;
-        public ViewModelProfile(User user, IUnitOfWork unitOfWork)
+        public ViewModelProfile(UserDto user, IUnitOfWork unitOfWork)
         {
             User = user;
             this.unitOfWork = unitOfWork;

@@ -72,7 +72,7 @@ namespace Whatsapp.Views.ViewPages {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Whatsapp;V1.0.0.0;component/views/viewpages/viewconfrimationcode.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Whatsapp;component/views/viewpages/viewconfrimationcode.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\ViewPages\ViewConfrimationCode.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

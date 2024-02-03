@@ -231,19 +231,20 @@
                 </Grid.RowDefinitions>
 
 
-                <Grid  Name="MainGridStatus" Visibility="Hidden" Height="350">
+                <Grid  Name="MainGridStatus" Visibility="Hidden" Height="400">
                     <!--Main Grid Definitions-->
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.35*"/>
+                        <RowDefinition Height="0.25*"/>
+                        <RowDefinition Height="0.25*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
 
-                    <StackPanel HorizontalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                    <StackPanel HorizontalAlignment="Center"  Grid.Row="0" Orientation="Horizontal">
                         <Button  Command="{Binding MyStatusCommand}" 
-                            Height="60" Width="60"  BorderThickness="0" Margin="0"   Background="Transparent" Padding="0">
-                            <Grid Height="50" Width="50">
-                                <Border CornerRadius="30" Height="50" Width="50">
+                            Height="40" Width="60"  BorderThickness="0" Margin="0"   Background="Transparent" Padding="0">
+                            <Grid Height="40" Width="50">
+                                <Border CornerRadius="30" Height="40" Width="50">
                                     <Border.Background>
                                         <ImageBrush x:Name="SelectedImagePath" ImageSource="{Binding User.ImagePath}"/>
                                     </Border.Background>
@@ -253,12 +254,12 @@
                         </Button>
 
                         <Button  Command="{Binding AddStatusCommand}" CommandParameter="{Binding ElementName=LoadingBtn}" 
-                                Height="60" Width="60"  BorderThickness="0" Margin="0"   Background="Transparent" Padding="0">
-                            <materialDesign:PackIcon Kind="AddBold" Height="50" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="Black"/>
+                                Height="40" Width="60"  BorderThickness="0" Margin="0"   Background="Transparent" Padding="0">
+                            <materialDesign:PackIcon Kind="AddBold" Height="40" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="Black"/>
                         </Button>
 
-                        <Button  Command="{Binding DeleteStatusCommand}" CommandParameter="{Binding ElementName=SelectedUserVideos}" 
-                                   Height="60" Width="60"  BorderThickness="0" Margin="0"   Background="Transparent" Padding="0">
+                        <Button  Command="{Binding DeleteStatusCommand}" CommandParameter="{Binding ElementName=SelectedUserVideos, Path=SelectedIndex}" 
+                                   Height="40" Width="60"  BorderThickness="0" Margin="0"   Background="Transparent" Padding="0">
                             <materialDesign:PackIcon Kind="Delete" Height="50" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="Black"/>
                         </Button>
 
@@ -275,29 +276,56 @@
                     </StackPanel>
 
 
+                    <ListView Grid.Row="1" x:Name="AllStatuses"    Background="Gray" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ItemsSource="{Binding Users}" Margin="0" Width="350" >
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                
+                                <Button Command="{Binding DataContext.SelectedUserStatusCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" 
+                                         Height="50" Width="50" CommandParameter="{Binding}" BorderThickness="0"   Background="Transparent" Padding="0">
+                                    <Border BorderBrush="DarkGreen" BorderThickness="3" CornerRadius="30" Height="50" Width="50">
+                                        <Border.Background>
+                                            <ImageBrush x:Name="SelectedImagePath" ImageSource="{Binding ImagePath}"/>
+                                        </Border.Background>
+                                    </Border>
+                                </Button>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
 
                     <!--<MediaElement Margin="20" Grid.Column="1" Grid.Row="1"  Source="\Database\Videos\video11.mp4" Height="200"  Width="300"   Stretch="Fill"/>-->
                     <!--<Image Grid.Column="1" Grid.Row="1"  Source="\Database\Images\blue-chat-app-icon-on-blue-background-3d-illustration-vector.jpg" Height="200"  Width="300"/>-->
 
-                    <ListView Grid.Row="1" x:Name="SelectedUserVideos"    Background="Gray"  ScrollViewer.HorizontalScrollBarVisibility="Hidden" ItemsSource="{Binding Statuses}" Margin="0,10" Width="350" >
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Button Height="200"  Width="300" Margin="20" Grid.Column="1" Command="{Binding DataContext.PlayPauseCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" CommandParameter="{Binding ElementName=media}" Background="Transparent">
-                                    <Grid Height="200"  Width="300" Margin="20" Grid.Column="1">
-                                       
-                                        <MediaElement MouseEnter="MouseEntered" MouseLeave="MouseLeft" LoadedBehavior="Pause" Name="media"  Source="{Binding VideoPath}" Stretch="Fill"/>
+                    <Grid Grid.Row="2" Margin="0,20,0,0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.2*"/>
+                        </Grid.RowDefinitions>
+                        <ListView BorderBrush="Red" BorderThickness="2"  Grid.Row="0" x:Name="SelectedUserVideos"    Background="Gray"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ItemsSource="{Binding Statuses}" Width="350" >
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="400"  Width="300" Margin="0" >
+                                        <MediaElement MouseEnter="MouseEntered" Height="300" MouseLeave="MouseLeft" LoadedBehavior="Pause" Name="media"  Source="{Binding VideoPath}" Stretch="Fill"/>
                                         <Label Content="{Binding Title}" Margin="5,20,5,0" FontSize="15" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                     </Grid>
-                                </Button>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+
+                        <Label Grid.Row="1" Height="50" FontSize="17" FontWeight="Bold" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="200" Content="{Binding SelectedUser}"/>
+
+                    </Grid>
 
                 </Grid>
 

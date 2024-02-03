@@ -53,7 +53,7 @@ namespace Whatsapp {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Whatsapp;V1.0.0.0;component/views/viewwindows/mainwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Whatsapp;component/views/viewwindows/mainwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\ViewWindows\MainWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

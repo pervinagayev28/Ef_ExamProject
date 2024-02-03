@@ -9,19 +9,12 @@ using System.Threading.Tasks;
 
 namespace ChatAppModelsLibrary.Models
 {
-    public class Message:ServiceINotifyPropertyChanged,IPrimaryKey<int>
+    public class Message:IPrimaryKey<int>
     {
-        private DateTime date;
-        private string messagee = null!;
-        private string messageForVisual;
-
-
         public int Id { get; set; }
+        public string message { get; set; }
 
-
-        public string message { get => messagee; set { messagee = value; OnPropertyChanged(); } }
-
-        public DateTime Date { get => date; set { date = value; OnPropertyChanged(); } }
+        public DateTime Date { get; set; }
 
 
         public int ToId { get; set; }
@@ -31,14 +24,6 @@ namespace ChatAppModelsLibrary.Models
         public int FromId { get; set; }
         public virtual User From { get; set; } = null!;
 
-
-
-        [NotMapped]
-        public string MessageForVisual { get => messageForVisual; set { messageForVisual = value; OnPropertyChanged(); } }
-
-        [NotMapped]
-
-        public int RightOrLeft { get; set; }
 
 
     }
