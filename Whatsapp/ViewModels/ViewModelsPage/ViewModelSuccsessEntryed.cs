@@ -34,6 +34,7 @@ using Whatsapp.Views.ViewPages;
 using Whatsapp.Views.ViewWindows;
 using AutoMapper;
 using Whatsapp.Dtos;
+using System.Reflection;
 
 namespace Whatsapp.ViewModels.ViewModelsPage
 {
@@ -88,6 +89,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         public ICommand? MouseEnteredCommand { get; set; }
         public ICommand? MouseLeftCommand { get; set; }
         public ICommand? SelectedUserStatusCommand { get; set; }
+        public ICommand? ChangeColorCommand { get; set; }
 
         private readonly IMapper _mapper;
 
@@ -119,12 +121,13 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             MyStatusCommand = new Command(ExecuteMyStatusCommand);
             MouseEnteredCommand = new Command(ExecuteMouseEneterdCommand);
             MouseLeftCommand = new Command(ExecuteMouseLeftCommand);
+            ProfileCommand = new Command(ExecuteProfileCommand);
+            ChangeColorCommand = new Command(ExecuteChangeColorCommand);
 
             //Async Commands Initialize
             SendMessageCommand = new CommandAsync(ExecuteSendMessageCommand, CanExecuteSendMessageCommand);
             AllUsersCommand = new CommandAsync(ExecuteAllUsersCommandAsync, CanExecuteAllUsersCommandAsync);
             OnlyChatUsersCommand = new CommandAsync(ExecuteOnlyChatUsersCommand, CanExecuteOnlyChatUsersCommand);
-            ProfileCommand = new Command(ExecuteProfileCommand);
             DeleteCommand = new CommandAsync(ExecuteDeleteCommand, CanExecuteDeleteCommand);
             DeleteStatusCommand = new CommandAsync(ExecuteDeleteStatusCommand, CanExecuteDeleteStatusCommand);
             AddStatusCommand = new CommandAsync(ExecuteAddStatusCommand);
@@ -136,6 +139,16 @@ namespace Whatsapp.ViewModels.ViewModelsPage
 
             //Start Mehtod Calling
             start(Gmail);
+        }
+
+        private void ExecuteChangeColorCommand(object obj)
+        {
+            Random random = new Random();
+            byte[] colorBytes = new byte[3];
+            random.NextBytes(colorBytes);
+            Color randomColor = Color.FromRgb(colorBytes[0], colorBytes[1], colorBytes[2]);
+            SolidColorBrush brush = new SolidColorBrush(randomColor);
+            ((Border)obj).Background = brush;
         }
 
         private async Task ExecutSelectedUserStatusCommand(object arg)
@@ -322,13 +335,13 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             ((Grid)((Page)obj)?.FindName("MainGridStatus")).Visibility = Visibility.Hidden;
         }
 
-        private async void ExecuteProfileCommand(object obj)
+        private void ExecuteProfileCommand(object obj)
         {
             var page = new WindowProfile();
-            timer.Stop();
+            timer?.Stop();
             page.DataContext = new ViewModelProfile(User, unitOfWork);
             page.ShowDialog();
-            timer.Start();
+            timer?.Start();
         }
         private void ExecuteLogOutCommand(object obj)
         {
@@ -385,7 +398,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         #region StartUp
         private async void start(string Gmail)
         {
-            User =_mapper.Map<UserDto>(await (await unitOfWork.GetRepository<User, int>().GetAll())
+            User = _mapper.Map<UserDto>(await (await unitOfWork.GetRepository<User, int>().GetAll())
                                  .Include(u => u.Status)
                                 .Include(u => u.ConnectionFroms)
                                 .Include(u => u.ConnectionTos)
@@ -434,7 +447,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             {
                 if (!checkTimer)
                 {
-                    Users = new(_mapper.Map<List<UserDto>> (await (await unitOfWork.GetRepository<User, int>().GetAll()).Where(u => u.Id != User.Id).ToListAsync()));
+                    Users = new(_mapper.Map<List<UserDto>>(await (await unitOfWork.GetRepository<User, int>().GetAll()).Where(u => u.Id != User.Id).ToListAsync()));
                     break;
                 }
             }
@@ -443,29 +456,18 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private async Task GetUsers()
         {
             timer?.Stop();
-            while (true)
-            {
-                if (!checkTimer)
-                {
-
-                   Users =new(_mapper.Map<List<UserDto>>(await (await unitOfWork.GetRepository<User, int>().GetAll())
-                                                    .Where(u => (u.Id != User!.Id) && (u.MessagesFroms!
-                                                               .Any(m => m.ToId == User.Id || m.FromId == User.Id) || u.MessagesTo
-                                                               .Any(m => m.ToId == User.Id || m.FromId == User.Id))
-                                                                && u.ConnectionFroms!
-                                                               .Any(c => c.FromId == User.Id && !c.SofDeleteFrom || c.ToId == User.Id && !c.SoftDeleteTo) || u.ConnectionTos!
-                                                               .Any(c => c.FromId == User.Id && !c.SofDeleteFrom || c.ToId == User.Id && !c.SoftDeleteTo) && u.Id != User.Id)
-                                                   .Include(u => u.MessagesFroms)
-                                                   .Include(u => u.MessagesTo)
-                                                   .Include(u => u.Status)
-                                                           .ToListAsync()));
-
-
-                    await GetLastMessages();
-                    break;
-                }
-            }
-
+            Users = new(_mapper.Map<List<UserDto>>(await (await unitOfWork.GetRepository<User, int>().GetAll())
+                                             .Where(u => (u.Id != User!.Id) && (u.MessagesFroms!
+                                                        .Any(m => m.ToId == User.Id || m.FromId == User.Id) || u.MessagesTo
+                                                        .Any(m => m.ToId == User.Id || m.FromId == User.Id))
+                                                         && u.ConnectionFroms!
+                                                        .Any(c => c.FromId == User.Id && !c.SofDeleteFrom || c.ToId == User.Id && !c.SoftDeleteTo) || u.ConnectionTos!
+                                                        .Any(c => c.FromId == User.Id && !c.SofDeleteFrom || c.ToId == User.Id && !c.SoftDeleteTo) && u.Id != User.Id)
+                                            .Include(u => u.MessagesFroms)
+                                            .Include(u => u.MessagesTo)
+                                            .Include(u => u.Status)
+                                                    .ToListAsync()));
+            await GetLastMessages();
         }
         class d
         {
@@ -476,9 +478,9 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             checkTimer = true;
             //File.AppendAllText("fooo.txt", DateTime.Now.ToString() + "began\n");
 
-            var data = 
-                
-                
+            var data =
+
+
                 await (await unitOfWork.GetRepository<UserConnection, int>().GetAll())
                             .Where(c => c.FromId == User.Id && c.ToId == currentSelectedUserId
                                 || c.ToId == User.Id && c.FromId == currentSelectedUserId)
