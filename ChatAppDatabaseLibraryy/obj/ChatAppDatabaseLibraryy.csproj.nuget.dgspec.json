@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj": {}
+    "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj": {
+    "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj",
         "projectName": "ChatAppDatabaseLibraryy",
-        "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj",
-        "packagesPath": "C:\\Users\\Agaye_jz58\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Agaye_jz58\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -32,11 +28,11 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj": {
-                "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj"
+              "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj"
               },
-              "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj": {
-                "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj"
+              "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj"
               }
             }
           }
@@ -78,25 +74,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj": {
+    "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj",
         "projectName": "ChatAppModelsLibrary",
-        "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj",
-        "packagesPath": "C:\\Users\\Agaye_jz58\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Agaye_jz58\\Source\\Repos\\Ef_ExamProject\\ChatAppModelsLibrary\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppModelsLibrary\\ChatAppModelsLibrary.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppModelsLibrary\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Agaye_jz58\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -110,8 +102,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj": {
-                "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj"
+              "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj"
               }
             }
           }
@@ -141,25 +133,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj": {
+    "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj",
         "projectName": "ChatAppService",
-        "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj",
-        "packagesPath": "C:\\Users\\Agaye_jz58\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Agaye_jz58\\Source\\Repos\\Ef_ExamProject\\ChatAppService\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\Ef_ExamProject\\ChatAppService\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Agaye_jz58\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -210,7 +198,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

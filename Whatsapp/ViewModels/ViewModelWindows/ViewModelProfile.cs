@@ -67,8 +67,12 @@ namespace Whatsapp.ViewModels.ViewModelWindows
             User.ImagePath != obj.ToString();
         private async void ExecuteCloseCommand(object obj)
         {
-            unitOfWork.GetRepository<User,int>().Update(await unitOfWork.GetRepository<User, int>().Get(User.Id))
-            await unitOfWork.Commit();
+            var modifiedUser = await unitOfWork.GetRepository<User, int>().Get(User.Id);
+            modifiedUser.Bio = User.Bio;
+            modifiedUser.ImagePath = User.ImagePath;
+            modifiedUser.Password= User.Password;
+            unitOfWork?.GetRepository<User, int>().Update(modifiedUser);
+            await unitOfWork?.Commit()!;
             ((Window)obj).Close();
         }
 

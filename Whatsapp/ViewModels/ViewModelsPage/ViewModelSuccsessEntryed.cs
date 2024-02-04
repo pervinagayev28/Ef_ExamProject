@@ -326,7 +326,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         {
             var page = new WindowProfile();
             timer.Stop();
-            page.DataContext = new ViewModelProfile(await unitOfWork.GetRepository<User,int>().Get(User.Id)!, unitOfWork);
+            page.DataContext = new ViewModelProfile(User, unitOfWork);
             page.ShowDialog();
             timer.Start();
         }
@@ -359,16 +359,6 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             timer?.Stop();
             grid = (Grid)obj;
             currentSelectedUserId = (Users[(int)((ListView)grid.FindName("list")).SelectedIndex] as UserDto)!.Id;
-
-            //if (checkStatus)
-            //{
-            //    var query = await unitOfWork.GetRepository<User, int>().GetAll();
-            //    var datas = await query.Include(u => u.Status).FirstOrDefaultAsync(u => u.Id == currentSelectedUserId);
-            //    ChangeVideoPath(datas?.Status!);
-            //    checkStatus = false;
-            //    CanDeleteStatus = false;
-            //}
-            //ChangeVideoPath((await(await unitOfWork.GetRepository<User, int>().GetAll()).Include(u=>u.Status).FirstOrDefaultAsync(u=>u.Id==currentSelectedUserId))?.Status!);
             timer?.Start();
         }
 
@@ -395,13 +385,11 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         #region StartUp
         private async void start(string Gmail)
         {
-            //User = await context?.UsersTbs.FirstOrDefaultAsync(u => u.Gmail == Gmail)!;
             User =_mapper.Map<UserDto>(await (await unitOfWork.GetRepository<User, int>().GetAll())
                                  .Include(u => u.Status)
                                 .Include(u => u.ConnectionFroms)
                                 .Include(u => u.ConnectionTos)
                                 .FirstOrDefaultAsync(u => u.Gmail == Gmail)!);
-            //User.ImagePath = "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\Whatsapp\\bin\\Debug\\net7.0-windows..\\..\\..\\..\\Database\\Videos\\Screenshot 2023-12-07 110202.png";
             ChangeVideoPath(User.Status);
 
 
