@@ -121,11 +121,11 @@ namespace ChatAppDatabaseLibraryy.Migrations
                 columns: new[] { "Id", "Title", "UserId", "VideoPath" },
                 values: new object[,]
                 {
-                    { 1, null, 2, "\\Database\\Videos\\video1.mp4" },
-                    { 2, null, 2, "\\Database\\Videos\\video2.mp4" },
-                    { 3, null, 2, "\\Database\\Videos\\video3.mp4" },
-                    { 4, null, 2, "\\Database\\Videos\\video4.mp4" },
-                    { 5, null, 2, "\\Database\\Videos\\video5.mp4" }
+                    { 1, null, 2, "\\Database\\Statues\\video1.mp4" },
+                    { 2, null, 2, "\\Database\\Statues\\video2.mp4" },
+                    { 3, null, 2, "\\Database\\Statues\\video3.mp4" },
+                    { 4, null, 2, "\\Database\\Statues\\video4.mp4" },
+                    { 5, null, 2, "\\Database\\Statues\\video5.mp4" }
                 });
 
             migrationBuilder.CreateIndex(

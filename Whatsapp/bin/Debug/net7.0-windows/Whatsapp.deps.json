@@ -1553,6 +1553,7 @@
       },
       "ChatAppService/1.0.0": {
         "dependencies": {
+          "AutoMapper": "12.0.1",
           "Microsoft.Extensions.Configuration.Json": "7.0.0"
         },
         "runtime": {

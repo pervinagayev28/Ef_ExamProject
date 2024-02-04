@@ -51,31 +51,31 @@ namespace ChatAppDatabaseLibraryy.Migrations
                         {
                             Id = 1,
                             UserId = 2,
-                            VideoPath = "\\Database\\Videos\\video1.mp4"
+                            VideoPath = "\\Database\\Statues\\video1.mp4"
                         },
                         new
                         {
                             Id = 2,
                             UserId = 2,
-                            VideoPath = "\\Database\\Videos\\video2.mp4"
+                            VideoPath = "\\Database\\Statues\\video2.mp4"
                         },
                         new
                         {
                             Id = 3,
                             UserId = 2,
-                            VideoPath = "\\Database\\Videos\\video3.mp4"
+                            VideoPath = "\\Database\\Statues\\video3.mp4"
                         },
                         new
                         {
                             Id = 4,
                             UserId = 2,
-                            VideoPath = "\\Database\\Videos\\video4.mp4"
+                            VideoPath = "\\Database\\Statues\\video4.mp4"
                         },
                         new
                         {
                             Id = 5,
                             UserId = 2,
-                            VideoPath = "\\Database\\Videos\\video5.mp4"
+                            VideoPath = "\\Database\\Statues\\video5.mp4"
                         });
                 });
 

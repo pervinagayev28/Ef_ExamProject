@@ -195,6 +195,8 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                     VideoPath = $@"\Database\Statues\{Path.GetFileName(fileDialog.FileName)}",
                     Title = "no title"
                 });
+
+                unitOfWork?.GetRepository<Status, int>().Add(User?.Status?.Last()!);
                 await unitOfWork.Commit()!;
                 ChangeVideoPath(User.Status);
                 ((Button)obj).Visibility = Visibility.Hidden;
@@ -320,11 +322,11 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             ((Grid)((Page)obj)?.FindName("MainGridStatus")).Visibility = Visibility.Hidden;
         }
 
-        private void ExecuteProfileCommand(object obj)
+        private async void ExecuteProfileCommand(object obj)
         {
             var page = new WindowProfile();
             timer.Stop();
-            page.DataContext = new ViewModelProfile(User!, unitOfWork);
+            page.DataContext = new ViewModelProfile(await unitOfWork.GetRepository<User,int>().Get(User.Id)!, unitOfWork);
             page.ShowDialog();
             timer.Start();
         }
@@ -399,7 +401,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                                 .Include(u => u.ConnectionFroms)
                                 .Include(u => u.ConnectionTos)
                                 .FirstOrDefaultAsync(u => u.Gmail == Gmail)!);
-
+            //User.ImagePath = "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\Whatsapp\\bin\\Debug\\net7.0-windows..\\..\\..\\..\\Database\\Videos\\Screenshot 2023-12-07 110202.png";
             ChangeVideoPath(User.Status);
 
 

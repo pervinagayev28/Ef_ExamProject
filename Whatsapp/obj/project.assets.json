@@ -2862,6 +2862,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "AutoMapper": "12.0.1",
           "Microsoft.Extensions.Configuration.Json": "6.0.0"
         },
         "compile": {
@@ -8702,19 +8703,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {}
+    "C:\\Users\\Agaye_jz58\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Desktop\\Whatsapp\\Whatsapp\\Whatsapp.csproj",
+      "projectUniqueName": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\Whatsapp\\Whatsapp.csproj",
       "projectName": "Whatsapp",
-      "projectPath": "C:\\Users\\user\\Desktop\\Whatsapp\\Whatsapp\\Whatsapp.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Desktop\\Whatsapp\\Whatsapp\\obj\\",
+      "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\Whatsapp\\Whatsapp.csproj",
+      "packagesPath": "C:\\Users\\Agaye_jz58\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Agaye_jz58\\Source\\Repos\\Ef_ExamProject\\Whatsapp\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Agaye_jz58\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8728,11 +8734,11 @@
         "net7.0-windows7.0": {
           "targetAlias": "net7.0-windows",
           "projectReferences": {
-            "C:\\Users\\user\\Desktop\\Whatsapp\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj": {
-              "projectPath": "C:\\Users\\user\\Desktop\\Whatsapp\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj"
+            "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj": {
+              "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppDatabaseLibraryy\\ChatAppDatabaseLibraryy.csproj"
             },
-            "C:\\Users\\user\\Desktop\\Whatsapp\\ChatAppService\\ChatAppService.csproj": {
-              "projectPath": "C:\\Users\\user\\Desktop\\Whatsapp\\ChatAppService\\ChatAppService.csproj"
+            "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj": {
+              "projectPath": "C:\\Users\\Agaye_jz58\\source\\repos\\Ef_ExamProject\\ChatAppService\\ChatAppService.csproj"
             }
           }
         }
@@ -8815,7 +8821,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

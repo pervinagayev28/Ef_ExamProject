@@ -21,7 +21,7 @@ namespace Whatsapp.UnitOfWorks.Concrets
     public  class UnitOfWork : IUnitOfWork
     {
         //Context
-        public  readonly ChatAppDb context;
+        private  readonly ChatAppDb context;
         
         private Dictionary<Type, object> repositories;
 

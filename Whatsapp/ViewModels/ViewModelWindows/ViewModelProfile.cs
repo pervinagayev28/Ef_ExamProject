@@ -2,6 +2,7 @@
 using ChatAppModelsLibrary.Models;
 using ChatAppModelsLibrary.Models.Concrets;
 using ChatAppService.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -66,6 +67,7 @@ namespace Whatsapp.ViewModels.ViewModelWindows
             User.ImagePath != obj.ToString();
         private async void ExecuteCloseCommand(object obj)
         {
+            unitOfWork.GetRepository<User,int>().Update(await unitOfWork.GetRepository<User, int>().Get(User.Id))
             await unitOfWork.Commit();
             ((Window)obj).Close();
         }
