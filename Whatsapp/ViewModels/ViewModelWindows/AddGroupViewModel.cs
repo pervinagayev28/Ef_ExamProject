@@ -27,12 +27,10 @@ namespace Whatsapp.ViewModels.ViewModelWindows
         public Group GroupEntity { get; set; }
         public GroupDto? Group { get => group; set { group = value; OnPropertyChanged(); } }
 
-        private readonly IUnitOfWork unitOfWork;
-        public AddGroupViewModel(Group group, IUnitOfWork unitOfWork)
+        public AddGroupViewModel(Group group)
         {
             Group = new();
             GroupEntity = group;
-            this.unitOfWork = unitOfWork;
             ChangeImageFromPCCommand = new Command(ExecuteChangeImageFromPCCommand);
             CloseCommand = new Command(ExecuteCloseCommand);
             CommandGetImage = new Command(ExecuteCommandGetImage, CanExecuteCommandGetImage);
@@ -72,9 +70,6 @@ namespace Whatsapp.ViewModels.ViewModelWindows
             }
         }
 
-        private void ExecuteChangeImageUrlCommand(object obj) =>
-            Group.ImagePath = obj.ToString();
-     
        
 
     }
