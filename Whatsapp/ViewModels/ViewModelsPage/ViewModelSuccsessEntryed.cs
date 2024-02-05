@@ -84,6 +84,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private string selectedUser;
         private ObservableCollection<Group> groups;
         private ObservableCollection<GroupMessageDto> groupMessages;
+        private ObservableCollection<UserDto> hasStatusUsers;
 
         #endregion
         #region Commands Initialiazes
@@ -118,6 +119,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
 
         #endregion
         #region Observable Collections
+        public ObservableCollection<UserDto> HasStatusUsers { get => hasStatusUsers; set { hasStatusUsers = value; OnPropertyChanged(); } }
         public ObservableCollection<UserDto> Users { get => users; set { users = value; OnPropertyChanged(); } }
         public ObservableCollection<MessageDto> Messages { get => messages; set { messages = value; OnPropertyChanged(); } }
         public ObservableCollection<Status> Statuses { get => statuses; set { statuses = value; OnPropertyChanged(); } }
@@ -517,10 +519,8 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                                 .Include(u => u.ConnectionTos)
                                 .FirstOrDefaultAsync(u => u.Gmail == Gmail)!);
             ChangeVideoPath(User.Status);
-            Thread th = new(GetUsersTest);
+            Thread th = new(GetUsersAsync);
             th.Start();
-            //await GetUsers();
-            //connections = await (await unitOfWork.GetRepository<UserConnection, int>().GetAll()).ToListAsync();
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += async (sender, e) => await TrickerDataBase();
@@ -532,12 +532,11 @@ namespace Whatsapp.ViewModels.ViewModelsPage
 
         }
 
-        private async void GetUsersTest(object? obj)
+        private async void GetUsersAsync(object? obj)
         {
             await GetUsers();
-            await GetLastMessages();
             connections = await (await unitOfWork.GetRepository<UserConnection, int>().GetAll()).ToListAsync();
-
+            HasStatusUsers = new(Users.Where(u => u.Status.Count!=0).ToList());
         }
 
         private async Task TrickerDataBaseForGroup()
@@ -585,7 +584,9 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         #region Async Methods
         private async Task GetLastMessages()
         {
-            timerForGroup?.Stop();
+            bool isEnabled = true;
+            if (timer is not null && timer.IsEnabled)
+                isEnabled = false;
             timer?.Stop();
             foreach (var item in users)
             {
@@ -605,7 +606,8 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                 Users = new(Users.OrderByDescending(u => u?.LastMessageDate).ToList());
             temp = (users?.FirstOrDefault(u => u?.Id == currentSelectedUserId) as UserDto)?.LastMessageDate;
             connections = await (await unitOfWork.GetRepository<UserConnection, int>().GetAll()).ToListAsync();
-            timer?.Start();
+            if (!isEnabled)
+                timer?.Start();
         }
 
 

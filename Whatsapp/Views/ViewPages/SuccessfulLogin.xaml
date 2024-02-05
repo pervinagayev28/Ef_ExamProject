@@ -379,7 +379,7 @@
                     </StackPanel>
 
 
-                    <ListView Grid.Row="1" x:Name="AllStatuses"    Background="Gray" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ItemsSource="{Binding Users}" Margin="0" Width="350" >
+                    <ListView Grid.Row="1" x:Name="AllStatuses"    Background="Gray" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden" ItemsSource="{Binding HasStatusUsers}" Margin="0" Width="350" >
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal"/>
