@@ -11,7 +11,9 @@
       Title="SuccessfulLogin">
     <Border CornerRadius="100" x:Name="MainBorder"  Background="Wheat">
         <!--<Border.Background>
-            --><!--<ImageBrush  ImageSource="https://turboazimages.blob.core.windows.net/myimages/blue-chat-app-icon-on-blue-background-3d-illustration-vector.jpg"/>--><!--
+            -->
+        <!--<ImageBrush  ImageSource="https://turboazimages.blob.core.windows.net/myimages/blue-chat-app-icon-on-blue-background-3d-illustration-vector.jpg"/>-->
+        <!--
             <ImageBrush  ImageSource="\Images\fon.jpg"/>
         </Border.Background>-->
 
@@ -41,7 +43,21 @@
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Grid.Column="1"
+                <Button Padding="0"
+                      Command="{Binding CreateGroupCommand}" CommandParameter="{Binding ElementName=list}"
+                      Width="70"
+                      Height="70"
+                      BorderBrush="Transparent"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                      materialDesign:ButtonAssist.CornerRadius="25"            
+                      ToolTip="MaterialDesignRaisedDarkButton with Round Corners"
+                      IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                    <materialDesign:PackIcon Height="50" Width="50" Kind="GroupAdd" Foreground="Black" />
+                </Button>
+
+                <Button 
                                    Command="{Binding SharesCommand}" CommandParameter="{Binding ElementName=page}"
                                    Width="70"
                                    Height="70"
@@ -70,7 +86,7 @@
 
 
             </StackPanel>
-       
+
             <materialDesign:PackIcon Kind="ChatTyping" Foreground="Black" Grid.Column="2" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
 
@@ -103,9 +119,9 @@
                 </Button>
 
                 <!--delete button-->
-                
-                
-                
+
+
+
                 <Button
                     Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=list}"
                        Margin="0,20,0,0"
@@ -137,11 +153,12 @@
                     <materialDesign:PackIcon  Kind="Person" />
                 </Button>
                 <Button Visibility="Hidden" Height="0" Width="0" Name="SelectedUserBtn" Command="{Binding SelectedChatUser}"/>
+                <Button Visibility="Hidden" Height="0" Width="0" Name="SelectedUserBtnForGroup" Command="{Binding SelectedChatUserForGroup}"/>
 
                 <!--Only chat Users Buttin-->
                 <Button 
       Command="{Binding OnlyChatUsersCommand}"
-                    CommandParameter="{Binding ElementName=list,Path=Items.Count}"
+                    CommandParameter="{Binding ElementName=AllList}"
           Name="OnlyChatUsers"
           Margin="0,20,0,0"
           Width="50"
@@ -157,7 +174,7 @@
 
                 <!--All Users Button-->
                 <Button 
-                    Command="{Binding AllUsersCommand}"
+                    Command="{Binding GetGroupsCommand}"
                     CommandParameter="{Binding ElementName=AllList}"
                         Name="AllUsers"
                         Margin="0,20,0,0"
@@ -218,6 +235,54 @@
                 </ListBox.ItemTemplate>
 
             </ListView>
+
+
+
+
+
+            <ListView SelectionChanged="selectedGroup"  ScrollViewer.VerticalScrollBarVisibility="Hidden"  ScrollViewer.HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Center" ItemsSource="{Binding Groups}" Grid.Column="1" Grid.Row="1" Name="listgroups" Margin="0,20,0,50">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid  Height="60" Width="250">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Command="{Binding DataContext.GetImageCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" 
+                            Height="50" Width="50" CommandParameter="{Binding ElementName=AllList}" BorderThickness="0"   Background="Transparent" Padding="0">
+                                <Border CornerRadius="30" Height="50" Width="50">
+                                    <Border.Background>
+                                        <ImageBrush x:Name="SelectedImagePath" ImageSource="{Binding ImagePath}"/>
+                                    </Border.Background>
+                                </Border>
+                            </Button>
+
+                            <Grid Grid.Column="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width ="*"/>
+                                    <ColumnDefinition Width ="0.13*"/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <Label Content="{Binding Name}" VerticalContentAlignment="Center" Foreground="Black" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold"/>
+                                <!--<Label Content="{Binding LastMessage}" Foreground="Black" VerticalAlignment="Center" Margin="10,0,0,0" FontStyle="Italic" Grid.Row="1"/>-->
+                                <materialDesign:PackIcon Grid.Row="1" Foreground="Black" Grid.Column="1" Kind="Accounts" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListView>
+
+
+
+
 
             <Grid VerticalAlignment="Top" Grid.Column="1" Grid.Row="1"   Name="OpenedImageGrid" Visibility="Hidden" Height="300">
                 <Border Name="UserImage" Height="200" Width="200">
@@ -299,7 +364,7 @@
                         </ListView.ItemsPanel>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                
+
                                 <Button Command="{Binding DataContext.SelectedUserStatusCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" 
                                          Height="50" Width="50" CommandParameter="{Binding}" BorderThickness="0"   Background="Transparent" Padding="0">
                                     <Border BorderBrush="DarkGreen" BorderThickness="3" CornerRadius="30" Height="50" Width="50">
@@ -370,12 +435,56 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
+                <ListView x:Name="GroupsList" BorderBrush="Black" Visibility="Hidden"  BorderThickness="1" Background="Gray" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ItemsSource="{Binding GroupMessages}" Width="400"  >
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label  HorizontalContentAlignment="Left" HorizontalAlignment="Left"  Height="30" Width="100">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Setter Property="Content" Value="{Binding From.Gmail}"/>
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RightOrLeft}" Value="0">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                </Label>
+                                <Label Width="390" FontStyle="Italic" FontWeight="Bold"  Foreground="Black">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Setter Property="Padding" Value="0,0,30,0"/>
+                                            <Setter Property="Content" Value="{Binding MessageForVisual}"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RightOrLeft}" Value="0">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                </Label>
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+
                 <Grid Name="SendMessageGrid"  Grid.Row="1" Margin="30,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="0.3*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="2" Command="{Binding SendMessageCommand}" CommandParameter="{Binding ElementName=messageText}"
+                    <Button Grid.Column="2" Name="SendMEssageCommand" Command="{Binding SendMessageCommand}" CommandParameter="{Binding ElementName=messageText}"
       Width="80"
       Height="80"
       Background="Transparent"
@@ -386,10 +495,20 @@
           IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
                         <materialDesign:PackIcon Foreground="Green"  Kind="Send" Height="50" Width="50"/>
                     </Button>
+                    <Button Grid.Column="2" Visibility="Hidden" x:Name="SendMessageToGroupCommand" Command="{Binding SendMessageToGroupCommand}" CommandParameter="{Binding ElementName=messageText}"
+Width="80"
+Height="80"
+Background="Transparent"
+                      BorderBrush="Transparent"
+    Style="{StaticResource MaterialDesignRaisedDarkButton}"
+    materialDesign:ButtonAssist.CornerRadius="25"            
+    ToolTip="MaterialDesignRaisedDarkButton with Round Corners"
+    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                        <materialDesign:PackIcon Foreground="Green"  Kind="Send" Height="50" Width="50"/>
+                    </Button>
 
 
-
-                    <TextBox Name="messageText" Margin="50,0,0,0"
+                    <TextBox  Name="messageText" Margin="50,0,0,0"
                         Height="70"
                              Width="250"
                         VerticalContentAlignment="Center" FontSize="20"

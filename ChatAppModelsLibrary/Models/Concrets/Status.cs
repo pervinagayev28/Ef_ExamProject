@@ -17,6 +17,6 @@ namespace ChatAppModelsLibrary.Models.Concrets
         public string ? Title { get; set; }
         public string VideoPath { get => videoPath; set { videoPath = value; OnPropertyChanged(); } }
         public int UserId { get; set; }
-        public User User{ get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -90,6 +90,10 @@ namespace ChatAppDatabaseLibraryy.Configurations
                .WithOne(u => u.To)
                .HasForeignKey(u => u.ToId)
                .OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(u => u.GroupMessages)
+           .WithOne(u => u.From)
+           .HasForeignKey(u => u.FromId)
+           .OnDelete(DeleteBehavior.NoAction);
 
 
 

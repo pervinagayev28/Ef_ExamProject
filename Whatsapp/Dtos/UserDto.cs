@@ -27,6 +27,7 @@ namespace Whatsapp.Dtos
         public virtual ICollection<UserConnection>? ConnectionFroms { get; set; }
         public virtual ICollection<Status>? Status { get => status; set { status = value; OnPropertyChanged(); } }
 
+        public virtual ICollection<GroupAndUser>? GroupAndUsers { get; set; }
 
 
         //Not mapped propts.

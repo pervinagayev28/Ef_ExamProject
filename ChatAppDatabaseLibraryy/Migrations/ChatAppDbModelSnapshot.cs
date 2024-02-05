@@ -18,9 +18,86 @@ namespace ChatAppDatabaseLibraryy.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.15")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ChatAppModelsLibrary.Models.Concrets.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("ChatAppModelsLibrary.Models.Concrets.GroupAndUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GroupAndUser");
+                });
+
+            modelBuilder.Entity("ChatAppModelsLibrary.Models.Concrets.GroupMessages", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FromId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupMessages");
+                });
 
             modelBuilder.Entity("ChatAppModelsLibrary.Models.Concrets.Status", b =>
                 {
@@ -223,6 +300,44 @@ namespace ChatAppDatabaseLibraryy.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ChatAppModelsLibrary.Models.Concrets.GroupAndUser", b =>
+                {
+                    b.HasOne("ChatAppModelsLibrary.Models.Concrets.Group", "Group")
+                        .WithMany("GroupAndUsers")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChatAppModelsLibrary.Models.User", "User")
+                        .WithMany("GroupAndUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChatAppModelsLibrary.Models.Concrets.GroupMessages", b =>
+                {
+                    b.HasOne("ChatAppModelsLibrary.Models.User", "From")
+                        .WithMany("GroupMessages")
+                        .HasForeignKey("FromId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ChatAppModelsLibrary.Models.Concrets.Group", "Group")
+                        .WithMany("Messages")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("From");
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("ChatAppModelsLibrary.Models.Concrets.Status", b =>
                 {
                     b.HasOne("ChatAppModelsLibrary.Models.User", "User")
@@ -272,11 +387,22 @@ namespace ChatAppDatabaseLibraryy.Migrations
                     b.Navigation("To");
                 });
 
+            modelBuilder.Entity("ChatAppModelsLibrary.Models.Concrets.Group", b =>
+                {
+                    b.Navigation("GroupAndUsers");
+
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("ChatAppModelsLibrary.Models.User", b =>
                 {
                     b.Navigation("ConnectionFroms");
 
                     b.Navigation("ConnectionTos");
+
+                    b.Navigation("GroupAndUsers");
+
+                    b.Navigation("GroupMessages");
 
                     b.Navigation("MessagesFroms");
 

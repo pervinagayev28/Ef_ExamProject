@@ -35,6 +35,8 @@ using Whatsapp.Views.ViewWindows;
 using AutoMapper;
 using Whatsapp.Dtos;
 using System.Reflection;
+using System.Security.Cryptography;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Whatsapp.ViewModels.ViewModelsPage
 {
@@ -53,11 +55,14 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         #endregion
         #region Private Fields
         private DispatcherTimer? timer;
+        private DispatcherTimer? timerForGroup;
         private Grid grid;
         private int currentSelectedUserId;
+        private int currentSelectedGroupId;
         private UserDto? user;
         private string selectedUserImagePath;
         private bool check = false;
+        private bool CheckAddForGroupMessage = false;
         private DateTime? temp;
         private int tempId;
         private bool checkTimer { get; set; }
@@ -69,13 +74,16 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private ObservableCollection<MessageDto> messages = new();
         private ObservableCollection<Status> statuses = new();
         private string selectedUser;
+        private ObservableCollection<Group> groups;
+        private ObservableCollection<GroupMessageDto> groupMessages;
 
         #endregion
         #region Commands Initialiazes
         public ICommand? SelectedChatUser { get; set; }
+        public ICommand? SelectedChatUserForGroup { get; set; }
         public ICommand? SendMessageCommand { get; set; }
         public ICommand? LogOutCommand { get; set; }
-        public ICommand? AllUsersCommand { get; set; }
+        public ICommand? GetGroupsCommand { get; set; }
         public ICommand? OnlyChatUsersCommand { get; set; }
         public ICommand? ProfileCommand { get; set; }
         public ICommand? CloseOpenedImageCommand { get; set; }
@@ -90,14 +98,24 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         public ICommand? MouseLeftCommand { get; set; }
         public ICommand? SelectedUserStatusCommand { get; set; }
         public ICommand? ChangeColorCommand { get; set; }
+        public ICommand? CreateGroupCommand { get; set; }
+        public ICommand? SendMessageToGroupCommand { get; set; }
+        public ICommand? DeleteGromGroupsCommand { get; set; }
 
-        private readonly IMapper _mapper;
+        #region IMapper Initialiazer
+
+
+        private readonly IMapper UserMapper;
+        #endregion
 
         #endregion
         #region Observable Collections
         public ObservableCollection<UserDto> Users { get => users; set { users = value; OnPropertyChanged(); } }
         public ObservableCollection<MessageDto> Messages { get => messages; set { messages = value; OnPropertyChanged(); } }
         public ObservableCollection<Status> Statuses { get => statuses; set { statuses = value; OnPropertyChanged(); } }
+        public ObservableCollection<Group> Groups { get => groups; set { groups = value; OnPropertyChanged(); } }
+        public ObservableCollection<GroupMessageDto> GroupMessages { get => groupMessages; set { groupMessages = value; OnPropertyChanged(); } }
+
         #endregion
         #region Propertioes
         public UserDto? User { get => user; set { user = value; OnPropertyChanged(); } }
@@ -112,7 +130,8 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             unitOfWork = new UnitOfWork();
 
             //Simple Commands Initialize
-            SelectedChatUser = new CommandAsync(ExecuteSelectedChatUser);
+            SelectedChatUser = new Command(ExecuteSelectedChatUser);
+            SelectedChatUserForGroup = new Command(ExecuteSelectedChatUserForGroup);
             LogOutCommand = new Command(ExecuteLogOutCommand);
             CloseOpenedImageCommand = new Command(ExecuteCloseOpenedImageCommand);
             GetImageCommand = new Command(ExecuteGetImageCommand);
@@ -125,20 +144,88 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             ChangeColorCommand = new Command(ExecuteChangeColorCommand);
 
             //Async Commands Initialize
+            CreateGroupCommand = new CommandAsync(ExecuteCreateGroupCommand, CanExecuteCreateGroupCommand);
             SendMessageCommand = new CommandAsync(ExecuteSendMessageCommand, CanExecuteSendMessageCommand);
-            AllUsersCommand = new CommandAsync(ExecuteAllUsersCommandAsync, CanExecuteAllUsersCommandAsync);
+            GetGroupsCommand = new Command(ExecuteGetGroupsCommandAsync, CanExecuteGetGroupsCommandAsync);
             OnlyChatUsersCommand = new CommandAsync(ExecuteOnlyChatUsersCommand, CanExecuteOnlyChatUsersCommand);
             DeleteCommand = new CommandAsync(ExecuteDeleteCommand, CanExecuteDeleteCommand);
             DeleteStatusCommand = new CommandAsync(ExecuteDeleteStatusCommand, CanExecuteDeleteStatusCommand);
             AddStatusCommand = new CommandAsync(ExecuteAddStatusCommand);
             SelectedUserStatusCommand = new CommandAsync(ExecutSelectedUserStatusCommand);
+            SendMessageToGroupCommand = new CommandAsync(ExecutSendMessageToGroupCommand, CanExecutSendMessageToGroupCommand);
 
 
-
-            _mapper = AutoMapperConfiguration.GetMapperConfiguration();
+            //Initialize Mapper
+            UserMapper = AutoMapperConfiguration.GetMapperConfiguration<User, UserDto>();
 
             //Start Mehtod Calling
             start(Gmail);
+        }
+
+
+
+        private bool CanExecutSendMessageToGroupCommand(object obj) =>
+            currentSelectedGroupId != 0 && ((TextBox)obj)?.Text != "";
+
+        private async Task ExecutSendMessageToGroupCommand(object arg)
+        {
+            timerForGroup?.Stop();
+            await unitOfWork.GetRepository<GroupMessages, int>().Add(new GroupMessages() { FromId = User.Id, Message = ((TextBox)arg).Text, Date = DateTime.Now, GroupId = currentSelectedGroupId });
+            await unitOfWork.Commit();
+            ((TextBox)arg).Text = "";
+            timerForGroup?.Start();
+        }
+
+        private void ExecuteSelectedChatUserForGroup(object arg)
+        {
+            timerForGroup?.Stop();
+            //timer?.Stop();
+            grid = (Grid)arg;
+            currentSelectedGroupId = (Groups[(int)((ListView)grid.FindName("listgroups")).SelectedIndex] as Group)!.Id;
+            timerForGroup?.Start();
+            //timer?.Start();
+        }
+
+        private bool CanExecuteCreateGroupCommand(object obj) =>
+            ((ListView)obj)?.SelectedIndex != -1;
+
+        private async Task ExecuteCreateGroupCommand(object obj)
+        {
+            timer?.Stop();
+            if (Groups is null)
+                Groups = new(await (await unitOfWork.GetRepository<Group, int>().GetAll()).Include(g => g.GroupAndUsers).ToListAsync());
+            Group group = new();
+            var page = new ViewAddGroup();
+            page.DataContext = new AddGroupViewModel(group, unitOfWork);
+            page.ShowDialog();
+            Groups.Add(group);
+            foreach (var user in ((ListView)obj).SelectedItems)
+            {
+                if (group.GroupAndUsers is null)
+                    group.GroupAndUsers = new List<GroupAndUser>();
+                group?.GroupAndUsers?.Add(new GroupAndUser()
+                {
+                    UserId = (user as UserDto).Id,
+                });
+            }
+            group?.GroupAndUsers?.Add(new GroupAndUser()
+            {
+                UserId = User.Id,
+            });
+
+            group.Messages = new List<GroupMessages>()
+            {
+                new GroupMessages()
+                {
+                FromId = User.Id,
+                Message = "Hello Friends,I Created This Group",
+                Date = DateTime.Now
+                }
+             };
+
+            await unitOfWork.GetRepository<Group, int>().Add(group);
+            await unitOfWork.Commit();
+            timer?.Start();
         }
 
         private void ExecuteChangeColorCommand(object obj)
@@ -173,8 +260,8 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private bool CanExecuteChatCommand(object obj) =>
           ((ListView)((Page)obj)?.FindName("list2")!)?.Visibility != Visibility.Visible;
         private bool CanExecuteSendMessageCommand(object obj) =>
-          currentSelectedUserId != 0;
-        private bool CanExecuteAllUsersCommandAsync(object obj) =>
+          currentSelectedUserId != 0 && ((TextBox)obj)?.Text != "";
+        private bool CanExecuteGetGroupsCommandAsync(object obj) =>
             !check;
 
         private bool CanExecuteOnlyChatUsersCommand(object obj) =>
@@ -219,87 +306,90 @@ namespace Whatsapp.ViewModels.ViewModelsPage
 
         private async Task ExecuteOnlyChatUsersCommand(object obj)
         {
+            ((ListView)((Grid)obj).FindName("list")).Visibility = Visibility.Visible;
+            ((ListView)((Grid)obj).FindName("list2")).Visibility = Visibility.Visible;
+            ((ListView)((Grid)obj).FindName("GroupsList")).Visibility = Visibility.Hidden;
+            ((ListView)((Grid)obj).FindName("listgroups")).Visibility = Visibility.Hidden;
+            timerForGroup?.Stop();
+            timer?.Start();
             check = false;
             await GetUsers();
         }
 
 
-        private async Task ExecuteAllUsersCommandAsync(object obj)
+        private async void ExecuteGetGroupsCommandAsync(object obj)
         {
             check = true;
-            await GetAllUsers();
+            ((ListView)((Grid)obj).FindName("GroupsList")).Visibility = Visibility.Visible;
+            ((ListView)((Grid)obj).FindName("listgroups")).Visibility = Visibility.Visible;
+            ((ListView)((Grid)obj).FindName("list")).Visibility = Visibility.Hidden;
+            ((Button)((Grid)obj).FindName("SendMessageToGroupCommand")).Visibility = Visibility.Visible;
+            ((Button)((Grid)obj).FindName("SendMEssageCommand")).Visibility = Visibility.Hidden;
+            ((ListView)((Grid)obj).FindName("list2")).Visibility = Visibility.Hidden;
+            Groups = new(await (await unitOfWork.GetRepository<Group, int>().GetAll())
+                .Include(g => g.GroupAndUsers)!.ThenInclude(u => u.User)
+                .Where(g => g.GroupAndUsers.Any(gu => gu.UserId == User.Id))
+                .ToListAsync()!)!;
+
+
+            timer?.Stop();
         }
         private async Task ExecuteDeleteCommand(object arg)
         {
             timer?.Stop();
 
-            while (true)
+
+            foreach (var item in ((ListView)arg)?.SelectedItems!)
             {
-                if (!checkTimer)
+                foreach (var connect in connections!)
                 {
-                    foreach (var item in ((ListView)arg)?.SelectedItems!)
-                    {
-                        foreach (var connect in connections!)
-                        {
-                            if (connect.FromId == User.Id && connect.ToId == (item as UserDto)?.Id)
-                                connect.SofDeleteFrom = true;
-                            else if (connect.ToId == User.Id && connect.FromId == (item as UserDto)?.Id)
-                                connect.SoftDeleteTo = true;
-                        }
-                    }
-                    ((ListView)arg)?.SelectedItems?.Clear();
-                    currentSelectedUserId = default;
-                    await unitOfWork.Commit();
-                    await GetUsers();
-                    break;
+                    if (connect.FromId == User.Id && connect.ToId == (item as UserDto)?.Id)
+                        connect.SofDeleteFrom = true;
+                    else if (connect.ToId == User.Id && connect.FromId == (item as UserDto)?.Id)
+                        connect.SoftDeleteTo = true;
                 }
             }
+                    ((ListView)arg)?.SelectedItems?.Clear();
+            currentSelectedUserId = default;
+            await unitOfWork.Commit();
+            await GetUsers();
+
+
             timer?.Start();
         }
         private async Task ExecuteSendMessageCommand(object obj)
         {
+            timerForGroup?.Stop();
             timer?.Stop();
-            //File.AppendAllText("fooo.txt", DateTime.Now.ToString()+"stopeed\n");
-            while (true)
+            bool check = true;
+            foreach (var item in connections!)
             {
-
-                //File.AppendAllText("foo2.txt", "cycles\t");
-                if (!checkTimer)
+                if ((item.FromId == User.Id && item.ToId == currentSelectedUserId) || (item.ToId == User.Id && item.FromId == currentSelectedUserId))
                 {
-                    bool check = true;
-                    foreach (var item in connections!)
-                    {
-                        if ((item.FromId == User.Id && item.ToId == currentSelectedUserId) || (item.ToId == User.Id && item.FromId == currentSelectedUserId))
-                        {
-                            check = false;
-                            if (item.SofDeleteFrom)
-                                item.FromConnectedDate = DateTime.Now;
-                            if (item.SoftDeleteTo)
-                                item.ToConnectedDate = DateTime.Now;
+                    check = false;
+                    if (item.SofDeleteFrom)
+                        item.FromConnectedDate = DateTime.Now;
+                    if (item.SoftDeleteTo)
+                        item.ToConnectedDate = DateTime.Now;
 
-                            item.SoftDeleteTo = false;
-                            item.SofDeleteFrom = false;
-                        }
-
-                    }
-                    if (check)
-                        await unitOfWork.GetRepository<UserConnection, int>().Add(new UserConnection()
-                        {
-                            FromId = User.Id,
-                            ToId = currentSelectedUserId,
-                            FromConnectedDate = DateTime.Now,
-                            ToConnectedDate = DateTime.Now
-                        });
-
-                    await unitOfWork.GetRepository<Message, int>().Add(new Message() { FromId = User.Id, message = ((TextBox)obj).Text, Date = DateTime.Now, ToId = currentSelectedUserId });
-                    await unitOfWork.Commit();
-                    await GetUsers();
-                    //File.AppendAllText("foo2.txt", "\n");
-                    break;
+                    item.SoftDeleteTo = false;
+                    item.SofDeleteFrom = false;
                 }
+
             }
+            if (check)
+                await unitOfWork.GetRepository<UserConnection, int>().Add(new UserConnection()
+                {
+                    FromId = User.Id,
+                    ToId = currentSelectedUserId,
+                    FromConnectedDate = DateTime.Now,
+                    ToConnectedDate = DateTime.Now
+                });
+
+            await unitOfWork.GetRepository<Message, int>().Add(new Message() { FromId = User.Id, message = ((TextBox)obj).Text, Date = DateTime.Now, ToId = currentSelectedUserId });
+            await unitOfWork.Commit();
+            await GetUsers();
             timer?.Start();
-            //File.AppendAllText("fooo.txt", DateTime.Now.ToString() + "start\n");
             ((TextBox)obj).Text = "";
         }
 
@@ -320,9 +410,12 @@ namespace Whatsapp.ViewModels.ViewModelsPage
 
         private void ExecuteSharesCommand(object obj)
         {
-            ((Grid)((Page)obj)?.FindName("MainGridStatus")).Visibility = Visibility.Visible;
-            ((Grid)((Page)obj)?.FindName("SendMessageGrid")).Visibility = Visibility.Hidden;
-            ((ListView)((Page)obj)?.FindName("list2")).Visibility = Visibility.Hidden;
+            timer?.Stop();
+            timerForGroup?.Stop();
+            ((Grid)((Page)obj)?.FindName("MainGridStatus")!).Visibility = Visibility.Visible;
+            ((Grid)((Page)obj)?.FindName("SendMessageGrid")!).Visibility = Visibility.Hidden;
+            ((ListView)((Page)obj)?.FindName("list2")!).Visibility = Visibility.Hidden;
+            ((ListView)((Page)obj)?.FindName("GroupsList")!).Visibility = Visibility.Hidden;
 
         }
 
@@ -330,22 +423,38 @@ namespace Whatsapp.ViewModels.ViewModelsPage
 
         private void ExecuteChatCommand(object obj)
         {
-            ((ListView)((Page)obj)?.FindName("list2")).Visibility = Visibility.Visible;
-            ((Grid)((Page)obj)?.FindName("SendMessageGrid")).Visibility = Visibility.Visible;
-            ((Grid)((Page)obj)?.FindName("MainGridStatus")).Visibility = Visibility.Hidden;
+            bool checktimer = true;
+            if (!timer.IsEnabled)
+                timer?.Start();
+            else
+                timerForGroup?.Start();
+            if (check)
+                ((ListView)((Page)obj)?.FindName("GroupsList")!).Visibility = Visibility.Visible;
+            else
+                ((ListView)((Page)obj)?.FindName("list2")!).Visibility = Visibility.Visible;
+            ((Grid)((Page)obj)?.FindName("SendMessageGrid")!).Visibility = Visibility.Visible;
+            ((Grid)((Page)obj)?.FindName("MainGridStatus")!).Visibility = Visibility.Hidden;
         }
 
-        private void ExecuteProfileCommand(object obj)
+        private async void ExecuteProfileCommand(object obj)
         {
             var page = new WindowProfile();
+            bool checktimer = true;
+            if (timer.IsEnabled)
+                checktimer = false;
             timer?.Stop();
+            timerForGroup?.Stop();
             page.DataContext = new ViewModelProfile(User, unitOfWork);
             page.ShowDialog();
-            timer?.Start();
+            if (!checktimer)
+                timer?.Start();
+            else
+                timerForGroup?.Start();
         }
         private void ExecuteLogOutCommand(object obj)
         {
             timer.IsEnabled = false;
+            timerForGroup.IsEnabled = false;
             //timer?.Stop();
             var page = new ViewEntry();
             page.DataContext = new ViewModelEntry();
@@ -366,8 +475,9 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         {
             ((Grid)arg).Visibility = Visibility.Hidden;
         }
-        private async Task ExecuteSelectedChatUser(object obj)
+        private void ExecuteSelectedChatUser(object obj)
         {
+            timerForGroup?.Stop();
             checkStatus = true;
             timer?.Stop();
             grid = (Grid)obj;
@@ -398,7 +508,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         #region StartUp
         private async void start(string Gmail)
         {
-            User = _mapper.Map<UserDto>(await (await unitOfWork.GetRepository<User, int>().GetAll())
+            User = UserMapper.Map<UserDto>(await (await unitOfWork.GetRepository<User, int>().GetAll())
                                  .Include(u => u.Status)
                                 .Include(u => u.ConnectionFroms)
                                 .Include(u => u.ConnectionTos)
@@ -412,11 +522,60 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += async (sender, e) => await TrickerDataBase();
+
+            timerForGroup = new DispatcherTimer();
+            timerForGroup.Interval = TimeSpan.FromSeconds(1);
+            timerForGroup.Tick += async (sender, e) => await TrickerDataBaseForGroup();
+
+
+        }
+
+        private async Task TrickerDataBaseForGroup()
+        {
+            timer?.Stop();
+            var messages = await (await unitOfWork.GetRepository<GroupMessages, int>().GetAll())
+                                        .Where(gm => gm.GroupId == currentSelectedGroupId)
+                                        .Select(gm => new GroupMessageDto
+                                        {
+                                            From = new User() { Gmail = gm.From.Gmail },
+                                            Message = gm.Message,
+                                            RightOrLeft = gm.FromId == User.Id ? 1 : 0,
+                                            Date = gm.Date,
+                                            MessageForVisual = gm.Message + " " + gm.Date.ToString("HH:mm"),
+                                        })
+                                        .ToListAsync();
+
+            if (messages?.Count > GroupMessages?.Count && tempId == currentSelectedGroupId)
+            {
+                GroupMessages.Add(new()
+                {
+                    Message = messages.Last().Message,
+                    MessageForVisual = messages.Last().MessageForVisual,
+                    RightOrLeft = messages.Last().RightOrLeft,
+                    Date = messages.Last().Date,
+                });
+
+                ((ListView)grid.FindName("GroupsList")).ScrollIntoView(GroupMessages?.Last());
+                if (CheckAddForGroupMessage)
+                    Groups = new(Groups?.OrderByDescending(u => u.Messages?.Last()?.Date).ToList());
+                CheckAddForGroupMessage = false;
+            }
+            else if (tempId != currentSelectedGroupId)
+            {
+                CheckAddForGroupMessage = true;
+                GroupMessages = new(messages);
+                if (GroupMessages.Count != 0)
+                    ((ListView)grid.FindName("GroupsList")).ScrollIntoView(GroupMessages.Last());
+            }
+
+            tempId = currentSelectedGroupId;
+
         }
         #endregion
         #region Async Methods
         private async Task GetLastMessages()
         {
+            timerForGroup?.Stop();
             timer?.Stop();
             foreach (var item in users)
             {
@@ -440,34 +599,20 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         }
 
 
-        private async Task GetAllUsers()
-        {
-            timer?.Stop();
-            while (true)
-            {
-                if (!checkTimer)
-                {
-                    Users = new(_mapper.Map<List<UserDto>>(await (await unitOfWork.GetRepository<User, int>().GetAll()).Where(u => u.Id != User.Id).ToListAsync()));
-                    break;
-                }
-            }
-        }
+
 
         private async Task GetUsers()
         {
+            timerForGroup?.Stop();
             timer?.Stop();
-            Users = new(_mapper.Map<List<UserDto>>(await (await unitOfWork.GetRepository<User, int>().GetAll())
-                                             .Where(u => (u.Id != User!.Id) && (u.MessagesFroms!
-                                                        .Any(m => m.ToId == User.Id || m.FromId == User.Id) || u.MessagesTo
-                                                        .Any(m => m.ToId == User.Id || m.FromId == User.Id))
-                                                         && u.ConnectionFroms!
-                                                        .Any(c => c.FromId == User.Id && !c.SofDeleteFrom || c.ToId == User.Id && !c.SoftDeleteTo) || u.ConnectionTos!
-                                                        .Any(c => c.FromId == User.Id && !c.SofDeleteFrom || c.ToId == User.Id && !c.SoftDeleteTo) && u.Id != User.Id)
-                                            .Include(u => u.MessagesFroms)
-                                            .Include(u => u.MessagesTo)
-                                            .Include(u => u.Status)
-                                                    .ToListAsync()));
+            Users = new(UserMapper.Map<List<UserDto>>(await (await unitOfWork.GetRepository<User, int>().GetAll())
+                                                                                             .Where(u => u.Id != User!.Id)
+                                                                                             .Include(u => u.MessagesFroms)
+                                                                                             .Include(u => u.MessagesTo)
+                                                                                             .Include(u => u.Status)
+                                                                                             .ToListAsync()));
             await GetLastMessages();
+            timer?.Start();
         }
         class d
         {
@@ -476,12 +621,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         public async Task TrickerDataBase()
         {
             checkTimer = true;
-            //File.AppendAllText("fooo.txt", DateTime.Now.ToString() + "began\n");
-
-            var data =
-
-
-                await (await unitOfWork.GetRepository<UserConnection, int>().GetAll())
+            var data = await (await unitOfWork.GetRepository<UserConnection, int>().GetAll())
                             .Where(c => c.FromId == User.Id && c.ToId == currentSelectedUserId
                                 || c.ToId == User.Id && c.FromId == currentSelectedUserId)
                                 .Select(c => new d
@@ -505,7 +645,8 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                       RightOrLeft = x.FromId == currentSelectedUserId ? 0 : 1,
                       message = x.message,
                       Date = x.Date,
-                      MessageForVisual = x.message + " " + x.Date.ToString("HH:mm")
+                      MessageForVisual = x.message + " " + x.Date.ToString("HH:mm"),
+                      From = new UserDto { Gmail = x.From.Gmail },
                   })
                   .OrderBy(m => m.Date)
                   .ToListAsync();
@@ -544,7 +685,6 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                 }
 
             }
-            //if (Messages.Count == 0 && messages.Count != 0)
             else
             {
 
@@ -563,7 +703,6 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             await GetLastMessages();
             tempId = currentSelectedUserId;
             checkTimer = false;
-            //File.AppendAllText("fooo.txt", DateTime.Now.ToString() + "finished\n");
 
         }
         #endregion

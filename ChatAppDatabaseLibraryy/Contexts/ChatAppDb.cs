@@ -24,13 +24,15 @@ namespace ChatAppDatabaseLibraryy.Contexts
         }
 
         public virtual DbSet<Message> Message { get; set; }
+        public virtual DbSet<Group> Groups{ get; set; }
 
         public virtual DbSet<User> UsersTbs { get; set; }
         public virtual DbSet<UserConnection> ConnectionsTb { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
-                .UseSqlServer(Configuration.GetValue());
+                .UseSqlServer(Configuration.GetValue())
+                .UseLazyLoadingProxies();
         //.UseSqlServer("Server=DESKTOP-47DGCU6\\SQL;Database=ChatTestingsdasd;User Id=MySql;Password=pervina9266_1;TrustServerCertificate=True;");
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

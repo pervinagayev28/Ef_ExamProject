@@ -51,7 +51,16 @@ namespace Whatsapp.Views.ViewPages
         private void MouseLeft(object sender, MouseEventArgs e) =>
             MouseLeftBtn.Command.Execute(sender as MediaElement);
 
-       
+        private void selectedGroup(object sender, SelectionChangedEventArgs e)
+        {
+            if (listgroups.SelectedIndex >= 0)
+            {
+                SelectedUserBtnForGroup.CommandParameter = AllList;
+                SelectedUserBtnForGroup.Command.Execute(AllList);
+            }
+        }
+
+      
     }
 }
 

@@ -721,3 +721,11 @@ C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\obj\Debug\net7.0-windows\Whatsapp.
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\obj\Debug\net7.0-windows\Whatsapp.csproj.CopyComplete
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\obj\Debug\net7.0-windows\Whatsapp.genruntimeconfig.cache
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\obj\Debug\net7.0-windows\ref\Whatsapp.dll
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\obj\Debug\net7.0-windows\Views\ViewWindows\ViewAddGroup.g.cs
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\obj\Debug\net7.0-windows\Views\ViewWindows\ViewAddGroup.baml
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\252035.png
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\BusPhoto.jpeg
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Castle.Core.dll
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Microsoft.EntityFrameworkCore.Proxies.dll
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\Maki-zushi.webp
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\classic-hamburger-stock-photo-isolated-260nw-2282033179.webp

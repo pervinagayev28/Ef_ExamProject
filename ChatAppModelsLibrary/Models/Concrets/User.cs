@@ -28,5 +28,7 @@ namespace ChatAppModelsLibrary.Models
         public virtual ICollection<UserConnection>? ConnectionTos { get; set; }
         public virtual ICollection<UserConnection>? ConnectionFroms { get; set; }
         public virtual ICollection<Status>? Status { get; set; }
+        public virtual ICollection<GroupAndUser>? GroupAndUsers{ get; set; }
+        public virtual ICollection<GroupMessages>? GroupMessages{ get; set; }
     }
 }

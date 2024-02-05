@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/252035.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/3135715.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/6.-black-boy-magic-afro.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/background.jpg")]
@@ -15,12 +16,15 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/blank-profile-picture-973460_1280.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/blank-profile-picture-973460_1280.webp")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/blue-chat-app-icon-on-blue-background-3d-illustration-vector.jpg")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/busphoto.jpeg")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/classic-hamburger-stock-photo-isolated-260nw-2282033179.webp")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/download%20(1).jpeg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/download.jpeg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/fon.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/image.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/images.jpeg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/loading.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/maki-zushi.webp")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/myphoto.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/photo-little-brunet-boy-wear-260nw-2030792027.webp")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/screenshot%202023-12-07%20110202.png")]
