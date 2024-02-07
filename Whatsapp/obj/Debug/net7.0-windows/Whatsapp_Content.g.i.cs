@@ -31,6 +31,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/screenshot%202023-12-07%20110202.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/screenshot%202024-02-04%20110218.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/screenshot_20230910_132940_whatsapp[75].jpg")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/usersdb2.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/your%20profile.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/statues/6.-black-boy-magic-afro.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/statues/busphoto.jpeg")]

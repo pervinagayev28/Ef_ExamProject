@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ChatAppDatabaseLibraryy.Contexts
 {
-    public partial class ChatAppDb:DbContext
+    public partial class ChatAppDb : DbContext
     {
         public ChatAppDb()
         {
@@ -24,14 +24,15 @@ namespace ChatAppDatabaseLibraryy.Contexts
         }
 
         public virtual DbSet<Message> Message { get; set; }
-        public virtual DbSet<Group> Groups{ get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
 
         public virtual DbSet<User> UsersTbs { get; set; }
         public virtual DbSet<UserConnection> ConnectionsTb { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
-                .UseSqlServer(Configuration.GetValue());
+                .UseSqlServer(Configuration.GetValue(),
+                            builder => builder.EnableRetryOnFailure());
                 //.UseLazyLoadingProxies();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -37,6 +37,7 @@ using Whatsapp.Dtos;
 using System.Reflection;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 
 namespace Whatsapp.ViewModels.ViewModelsPage
 {
@@ -152,20 +153,20 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             CloseOpenedImageCommand = new Command(ExecuteCloseOpenedImageCommand);
             GetImageCommand = new Command(ExecuteGetImageCommand);
             ChatCommand = new Command(ExecuteChatCommand, CanExecuteChatCommand);
-            SharesCommand = new Command(ExecuteSharesCommand, CanExecuteSharesCommand);
             MouseEnteredCommand = new Command(ExecuteMouseEneterdCommand);
             MouseLeftCommand = new Command(ExecuteMouseLeftCommand);
             ProfileCommand = new Command(ExecuteProfileCommand);
             ChangeColorCommand = new Command(ExecuteChangeColorCommand);
             SelectedUserStatusCommand = new Command(ExecutSelectedUserStatusCommand);
-            OnlyChatUsersCommand = new Command(ExecuteOnlyChatUsersCommand, CanExecuteOnlyChatUsersCommand);
-            GetGroupsCommand = new Command(ExecuteGetGroupsCommandAsync, CanExecuteGetGroupsCommandAsync);
 
             //Async Commands Initialize
+            OnlyChatUsersCommand = new CommandAsync(ExecuteOnlyChatUsersCommandAsync, CanExecuteOnlyChatUsersCommand);
+            GetGroupsCommand = new CommandAsync(ExecuteGetGroupsCommandAsync, CanExecuteGetGroupsCommandAsync);
+            DeleteCommand = new CommandAsync(ExecuteDeleteCommand, CanExecuteDeleteCommand);
+            SharesCommand = new CommandAsync(ExecuteSharesCommand, CanExecuteSharesCommand);
             MyStatusCommand = new CommandAsync(ExecuteMyStatusCommand);
             CreateGroupCommand = new CommandAsync(ExecuteCreateGroupCommand, CanExecuteCreateGroupCommand);
             SendMessageCommand = new CommandAsync(ExecuteSendMessageCommand, CanExecuteSendMessageCommand);
-            DeleteCommand = new CommandAsync(ExecuteDeleteCommand, CanExecuteDeleteCommand);
             DeleteStatusCommand = new CommandAsync(ExecuteDeleteStatusCommand, CanExecuteDeleteStatusCommand);
             AddStatusCommand = new CommandAsync(ExecuteAddStatusCommand);
             SendMessageToGroupCommand = new CommandAsync(ExecutSendMessageToGroupCommand, CanExecutSendMessageToGroupCommand);
@@ -186,6 +187,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private async Task ExecutSendMessageToGroupCommand(object arg)
         {
             timerForGroup?.Stop();
+            await Task.Delay(700);
             await unitOfWork.GetRepository<GroupMessages, int>().Add(new GroupMessages() { FromId = User.Id, Message = ((TextBox)arg).Text, Date = DateTime.Now, GroupId = currentSelectedGroupId });
             await unitOfWork.Commit();
             ((TextBox)arg).Text = "";
@@ -195,7 +197,6 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private void ExecuteSelectedChatUserForGroup(object arg)
         {
             LoadingVisibilityChat = Visibility.Visible;
-            timerForGroup?.Stop();
             grid = (Grid)arg;
             currentSelectedGroupId = (Groups[(int)((ListView)grid.FindName("listgroups")).SelectedIndex] as Group)!.Id;
             timerForGroup?.Start();
@@ -207,6 +208,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private async Task ExecuteCreateGroupCommand(object obj)
         {
             timer?.Stop();
+            await Task.Delay(700);
             if (Groups is null)
                 Groups = new(await (unitOfWork.GetRepository<Group, int>().GetAll()).Include(g => g.GroupAndUsers).ToListAsync());
             Group group = new();
@@ -313,7 +315,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             }
         }
 
-        private void ExecuteOnlyChatUsersCommand(object obj)
+        private async Task ExecuteOnlyChatUsersCommandAsync(object obj)
         {
             tempId = 0;
             Thread th = new(GetUsersAsync);
@@ -324,14 +326,16 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             ((ListView)((Grid)obj).FindName("GroupsList")).Visibility = Visibility.Hidden;
             ((ListView)((Grid)obj).FindName("listgroups")).Visibility = Visibility.Hidden;
             timerForGroup?.Stop();
+            await Task.Delay(500);
             check = false;
         }
 
 
-        private  void ExecuteGetGroupsCommandAsync(object obj)
+        private async Task ExecuteGetGroupsCommandAsync(object obj)
         {
             tempId = 0;
             timer?.Stop();
+            await Task.Delay(500);
             LoadingVisibility = Visibility.Visible;
             Thread th = new(GetGroupAsync);
             th.Start();
@@ -346,7 +350,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
 
         private async void GetGroupAsync(object? obj)
         {
-            Groups = new(await(unitOfWork.GetRepository<Group, int>().GetAll())
+            Groups = new(await (unitOfWork.GetRepository<Group, int>().GetAll())
                             .Include(g => g.GroupAndUsers)!.ThenInclude(u => u.User)
                             .Where(g => g.GroupAndUsers.Any(gu => gu.UserId == User.Id))
                             .ToListAsync()!)!;
@@ -356,30 +360,19 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private async Task ExecuteDeleteCommand(object arg)
         {
             timer?.Stop();
-
-
-            foreach (var item in ((ListView)arg)?.SelectedItems!)
-            {
-                foreach (var connect in connections!)
-                {
-                    if (connect.FromId == User.Id && connect.ToId == (item as UserDto)?.Id)
-                        connect.SofDeleteFrom = true;
-                    else if (connect.ToId == User.Id && connect.FromId == (item as UserDto)?.Id)
-                        connect.SoftDeleteTo = true;
-                }
-            }
-                    ((ListView)arg)?.SelectedItems?.Clear();
+            await Task.Delay(500);
             currentSelectedUserId = default;
-            await unitOfWork.Commit();
-            await GetUsers();
-
-
+            foreach (var item in UserMapper.Map<List<UserDto>>(((ListView)arg)?.SelectedItems)!)
+                Users?.Remove(item as UserDto);
+            ((ListView)arg!)?.SelectedItems?.Clear();
             timer?.Start();
+
         }
         private async Task ExecuteSendMessageCommand(object obj)
         {
             timerForGroup?.Stop();
             timer?.Stop();
+            await Task.Delay(700);
             await unitOfWork.GetRepository<Message, int>().Add(new Message() { FromId = User.Id, message = ((TextBox)obj).Text, Date = DateTime.Now, ToId = currentSelectedUserId });
             await unitOfWork.Commit();
             #region Comment
@@ -437,14 +430,20 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private void ExecuteMouseEneterdCommand(object obj) =>
             ((MediaElement)obj).LoadedBehavior = MediaState.Play;
 
-        private void ExecuteSharesCommand(object obj)
+        private async Task ExecuteSharesCommand(object obj)
         {
             timer?.Stop();
             timerForGroup?.Stop();
+            await Task.Delay(500);
             ((Grid)((Page)obj)?.FindName("MainGridStatus")!).Visibility = Visibility.Visible;
             ((Grid)((Page)obj)?.FindName("SendMessageGrid")!).Visibility = Visibility.Hidden;
             ((ListView)((Page)obj)?.FindName("list2")!).Visibility = Visibility.Hidden;
             ((ListView)((Page)obj)?.FindName("GroupsList")!).Visibility = Visibility.Hidden;
+
+            HasStatusUsers = UserMapper.Map<ObservableCollection<UserDto>>(await unitOfWork.GetRepository<User, int>()
+                .GetAll()
+                .Include(u => u.Status)
+                .Where(u => u.Status.Count != 0).ToListAsync());
 
         }
 
@@ -473,6 +472,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                 checktimer = false;
             timer?.Stop();
             timerForGroup?.Stop();
+
             page.DataContext = new ViewModelProfile(User, unitOfWork);
             page.ShowDialog();
             if (!checktimer)
@@ -507,9 +507,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private void ExecuteSelectedChatUser(object obj)
         {
             LoadingVisibilityChat = Visibility.Visible;
-            //timerForGroup?.Stop();
             checkStatus = true;
-            //timer?.Stop();
             grid = (Grid)obj;
             currentSelectedUserId = (Users[(int)((ListView)grid.FindName("list")).SelectedIndex] as UserDto)!.Id;
             timer?.Start();
@@ -558,7 +556,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         {
             await GetUsers();
             //connections = await (unitOfWork.GetRepository<UserConnection, int>().GetAll()).ToListAsync();
-            //LoadingVisibility = Visibility.Hidden;
+            LoadingVisibility = Visibility.Hidden;
         }
 
         private async Task TrickerDataBaseForGroup()
@@ -642,10 +640,11 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         {
             timerForGroup?.Stop();
             timer?.Stop();
+            await Task.Delay(500);
+
             Users = new(UserMapper.Map<List<UserDto>>(await unitOfWork.GetRepository<User, int>()
                 .GetAllListAsync()).Where(u => u.Id != User.Id));
             await GetLastMessages();
-            LoadingVisibility = Visibility.Hidden;
         }
         class d
         {
@@ -720,7 +719,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                 ((ListView)grid.FindName("list2")).ScrollIntoView(Messages.Last());
             }
 
-            else  if(tempId!= currentSelectedUserId)
+            else if (tempId != currentSelectedUserId)
             {
                 LoadingVisibilityChat = Visibility.Hidden;
                 Messages = new(messages);
