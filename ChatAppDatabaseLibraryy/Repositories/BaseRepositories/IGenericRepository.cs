@@ -10,12 +10,14 @@ namespace Whatsapp.Repositories.BaseRepositories
     public interface IGenericRepository<TEntity, TKey>
         where TEntity : class, IPrimaryKey<TKey>
     {
-        Task<IQueryable<TEntity>> GetAll();
+        //Task<IQueryable<TEntity>> GetAll();
+        IQueryable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAllListAsync();
         ValueTask<TEntity> Get(TKey Id);
 
-        Task<TEntity> Add(TEntity entity);
-        Task<TEntity> Update(TEntity entity);
-        Task<TEntity> Delete(TEntity entity);
+        Task Add(TEntity entity);
+        Task Update(TEntity entity);
+        Task Delete(TEntity entity);
         Task Commit();
 
     }

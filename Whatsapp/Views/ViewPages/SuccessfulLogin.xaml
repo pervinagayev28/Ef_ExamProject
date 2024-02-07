@@ -501,7 +501,19 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-
+                <Button 
+Height="100"
+Width="100"
+            VerticalAlignment="top" Margin="0,100,0,0"
+            BorderBrush="Transparent"  Visibility="{Binding LoadingVisibilityChat}"
+Style="{StaticResource MaterialDesignFloatingActionButton}"
+materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+materialDesign:ButtonProgressAssist.IndicatorBackground="Transparent"
+materialDesign:ButtonProgressAssist.Value="-2"
+materialDesign:ButtonProgressAssist.IndicatorForeground="Black"
+materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+Background="Transparent"/>
                 <Grid Name="SendMessageGrid"  Grid.Row="1" Margin="30,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>

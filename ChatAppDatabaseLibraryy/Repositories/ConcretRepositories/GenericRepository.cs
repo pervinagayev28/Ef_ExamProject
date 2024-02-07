@@ -25,32 +25,32 @@ namespace Whatsapp.Repositories.ConcretRepositories
 
         }
         //Crud Functionally
-        public async Task<IQueryable<TEntity>> GetAll() =>
-             set;
+        public async Task<IEnumerable<TEntity>> GetAllListAsync() =>
+            await set.ToListAsync();
+        public IQueryable<TEntity> GetAll() =>
+            set;
 
-        public async Task<TEntity> Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
+            //context.Entry(entity).State = EntityState.Added;
             await set.AddAsync(entity);
-            return entity;
         }
 
-        public async Task<TEntity> Update(TEntity entity)
+        public async Task Update(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
-            set.Update(entity);
-            return entity;
+            context.Entry(entity).State = EntityState.Modified;
         }
 
-        public async Task<TEntity> Delete(TEntity entity)
+        public async Task Delete(TEntity entity)
         {
             if (entity is null)
                 throw new ArgumentNullException(nameof(entity));
-
-            set.Remove(entity);
-            return entity;
+            //context.Entry(entity).State  &= ~EntityState.Deleted;
+            context.Entry(entity).State = EntityState.Deleted ;
         }
 
         public async ValueTask<TEntity> Get(TKey Id)=>
@@ -61,6 +61,6 @@ namespace Whatsapp.Repositories.ConcretRepositories
         public async Task Commit() =>
             await context.SaveChangesAsync();
 
-      
+     
     }
 }

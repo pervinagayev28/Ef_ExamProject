@@ -729,3 +729,4 @@ C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Castle.Co
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\Maki-zushi.webp
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\classic-hamburger-stock-photo-isolated-260nw-2282033179.webp
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\image (1).jpg

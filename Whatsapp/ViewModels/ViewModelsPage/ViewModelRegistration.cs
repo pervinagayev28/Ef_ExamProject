@@ -50,7 +50,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private void ExecuteGoBackCommand(object obj)=>
             ((Page)obj).NavigationService.GoBack(); 
         private async void CheckGmail() =>
-            gmails = await (await unitOfWork.GetRepository<User, int>().GetAll()).Select(x => x.Gmail).ToListAsync();
+            gmails = await (unitOfWork.GetRepository<User, int>().GetAll()).Select(x => x.Gmail).ToListAsync();
 
         private bool CanExecuteSendCodeCommand(object obj) =>
             Regex.IsMatch(((PasswordBox)((Page)obj)

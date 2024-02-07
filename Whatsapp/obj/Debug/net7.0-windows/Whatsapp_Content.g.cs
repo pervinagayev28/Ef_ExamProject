@@ -21,6 +21,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/download%20(1).jpeg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/download.jpeg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/fon.jpg")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/image%20(1).jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/image.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/images.jpeg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/loading.png")]

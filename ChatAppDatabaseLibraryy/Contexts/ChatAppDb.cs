@@ -31,9 +31,8 @@ namespace ChatAppDatabaseLibraryy.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
-                .UseSqlServer(Configuration.GetValue())
-                .UseLazyLoadingProxies();
-        //.UseSqlServer("Server=DESKTOP-47DGCU6\\SQL;Database=ChatTestingsdasd;User Id=MySql;Password=pervina9266_1;TrustServerCertificate=True;");
+                .UseSqlServer(Configuration.GetValue());
+                //.UseLazyLoadingProxies();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
