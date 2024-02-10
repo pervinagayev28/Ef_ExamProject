@@ -1,4 +1,5 @@
 ﻿using ChatAppDatabaseLibraryy.Contexts;
+using ChatAppModelsLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -13,6 +14,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using Whatsapp.Commands;
+using Whatsapp.UnitOfWorks.BaseUnitOfWorks;
+using Whatsapp.UnitOfWorks.Concrets;
 using Whatsapp.Views.ViewPages;
 
 namespace Whatsapp.ViewModels.ViewModelsPage
@@ -23,8 +26,10 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         public ICommand? LogInCommand { get; set; }
         public ICommand? RegistrationCommand { get; set; }
         public ICommand? CloseCommand { get; set; }
+        private IUnitOfWork unitOfWork;
         public ViewModelEntry()
         {
+            unitOfWork = new UnitOfWork();
             GetUserGmails();
             LogInCommand = new Command(ExecuteLogInCommand, CanExecuteLogInCommand);
             RegistrationCommand = new Command(ExecuteRegistrationCommand);
@@ -46,7 +51,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
 
         private async void GetUserGmails()
         {
-            gmails = await new ChatAppDb().UsersTbs.Select(x => x.Gmail).ToListAsync();
+            gmails = await unitOfWork.GetRepository<User, int>().GetAll().Select(u => u.Gmail).ToListAsync();
         }
         private void ExecuteRegistrationCommand(object obj)
         {
@@ -58,11 +63,21 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         private bool CanExecuteLogInCommand(object obj) =>
                   gmails.Any(g => g == ((PasswordBox)((Page)obj).FindName("GmailTextBox")).Password);
 
-        private void ExecuteLogInCommand(object obj)
+        private async void ExecuteLogInCommand(object obj)
         {
+            var user = await unitOfWork.GetRepository<User, int>().GetAll()
+                .Where(u => u.Gmail == ((PasswordBox)((Page)obj).FindName("GmailTextBox")).Password)
+                .FirstOrDefaultAsync();
+
+            if (user.IsUsing)
+            {
+                MessageBox.Show("This Account uses by another Client");
+                return;
+            }
+            user.IsUsing = true;
+            await unitOfWork.Commit();
             var page = new SuccessfulLogin();
-            page.DataContext = new ViewModelSuccsessEntryed(((PasswordBox)((Page)obj).FindName("GmailTextBox")).Password
-                            , new ChatAppDb());
+            page.DataContext = new ViewModelSuccsessEntryed(((PasswordBox)((Page)obj).FindName("GmailTextBox")).Password);
             ((Page)obj).NavigationService.Navigate(page);
         }
     }

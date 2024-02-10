@@ -18,9 +18,6 @@ namespace ChatAppDatabaseLibraryy.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.15")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -245,6 +242,11 @@ namespace ChatAppDatabaseLibraryy.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsUsing")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -264,6 +266,7 @@ namespace ChatAppDatabaseLibraryy.Migrations
                             Bio = "I am John",
                             Gmail = "John",
                             ImagePath = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+                            IsUsing = false,
                             Password = "1234"
                         },
                         new
@@ -272,6 +275,7 @@ namespace ChatAppDatabaseLibraryy.Migrations
                             Bio = "I am BlackBoy",
                             Gmail = "BlackBoy",
                             ImagePath = "\\Images\\3135715.png",
+                            IsUsing = false,
                             Password = "1234"
                         },
                         new
@@ -280,6 +284,7 @@ namespace ChatAppDatabaseLibraryy.Migrations
                             Bio = "I am Cavanshir",
                             Gmail = "Cavanshir",
                             ImagePath = "\\Images\\download (1).jpeg",
+                            IsUsing = false,
                             Password = "1234"
                         },
                         new
@@ -288,6 +293,7 @@ namespace ChatAppDatabaseLibraryy.Migrations
                             Bio = "I am Qudret",
                             Gmail = "Qudret",
                             ImagePath = "\\Images\\photo-little-brunet-boy-wear-260nw-2030792027.webp",
+                            IsUsing = false,
                             Password = "1234"
                         },
                         new
@@ -296,6 +302,7 @@ namespace ChatAppDatabaseLibraryy.Migrations
                             Bio = "I am Michail",
                             Gmail = "Michail",
                             ImagePath = "\\Images\\3135715.png",
+                            IsUsing = false,
                             Password = "1234"
                         });
                 });

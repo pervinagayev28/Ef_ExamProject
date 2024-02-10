@@ -141,10 +141,13 @@ namespace Whatsapp.ViewModels.ViewModelsPage
         #endregion
         #region Constructor
 
-        public ViewModelSuccsessEntryed(string Gmail, ChatAppDb? myChatingAppContext)
+        public ViewModelSuccsessEntryed(string Gmail)
         {
             //Initialize UnitOfWork
             unitOfWork = new UnitOfWork();
+
+
+            
 
             //Simple Commands Initialize
             SelectedChatUser = new Command(ExecuteSelectedChatUser);
@@ -480,10 +483,15 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             else
                 timerForGroup?.Start();
         }
-        private void ExecuteLogOutCommand(object obj)
+        private async void ExecuteLogOutCommand(object obj)
         {
             timer?.Stop();
             timerForGroup?.Stop();
+            await Task.Delay(500);
+
+            var user = await unitOfWork.GetRepository<User, int>().Get(User.Id);
+            user.IsUsing = false;
+            await unitOfWork.Commit();
             //timer?.Stop();
             var page = new ViewEntry();
             page.DataContext = new ViewModelEntry();
@@ -567,7 +575,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                                         .Where(gm => gm.GroupId == currentId)
                                         .Select(gm => new GroupMessageDto
                                         {
-                                            From =  UserMapper.Map<UserDto>(new User() { Gmail = gm.From.Gmail }),
+                                            From = UserMapper.Map<UserDto>(new User() { Gmail = gm.From.Gmail }),
                                             Message = gm.Message,
                                             RightOrLeft = gm.FromId == User.Id ? 1 : 0,
                                             Date = gm.Date,

@@ -17,7 +17,7 @@ namespace Whatsapp.Dtos
         public string Password { get; set; } = null!;
         public string? Bio { get; set; } = null!;
         public string Gmail { get => gmail; set { gmail = value; OnPropertyChanged(); } }
-
+        public bool IsUsing { get; set; }
         public string? ImagePath { get => imagePath; set { imagePath = value; OnPropertyChanged(); } }
 
         public virtual ICollection<Message>? MessagesTo { get; set; }

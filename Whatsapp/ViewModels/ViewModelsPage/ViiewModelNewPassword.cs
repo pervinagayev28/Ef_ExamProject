@@ -65,7 +65,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             await context.UsersTbs.AddAsync(user);
             await context.SaveChangesAsync();
             var page = new SuccessfulLogin();
-            page.DataContext = new ViewModelSuccsessEntryed(Gmail, context);
+            page.DataContext = new ViewModelSuccsessEntryed(Gmail);
             ((Page)obj).NavigationService.Navigate(page);
 
 

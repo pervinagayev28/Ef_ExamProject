@@ -66,6 +66,7 @@ namespace ChatAppDatabaseLibraryy.Configurations
                 .HasMaxLength(50);
             builder.HasIndex(u => u.Gmail)
                 .IsUnique();
+            builder.Property(u => u.IsUsing).HasDefaultValue(false);
 
             builder.Property(u => u.Gmail)
                 .HasAnnotation("RegularExpression", @"^[a-zA-Z0-9._%+-]+@gmail\.com$");

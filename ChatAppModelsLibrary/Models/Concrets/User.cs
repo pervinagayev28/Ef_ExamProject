@@ -19,7 +19,7 @@ namespace ChatAppModelsLibrary.Models
         public string Password { get; set; } = null!;
         public string? Bio { get; set; } = null!;
         public string Gmail { get; set; }
-
+        public bool IsUsing{ get; set; }
         public string? ImagePath { get; set; }
 
         public virtual ICollection<Message>? MessagesTo { get; set; }

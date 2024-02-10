@@ -36,6 +36,7 @@ namespace ChatAppDatabaseLibraryy.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Bio = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Gmail = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsUsing = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
