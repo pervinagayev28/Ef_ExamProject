@@ -20,7 +20,7 @@ namespace Whatsapp.Dtos
         public int GroupId { get; set; }
         public virtual Group Group { get; set; }
         public int FromId { get; set; }
-        public virtual User From { get; set; }
+        public virtual UserDto From { get; set; }
         public int RightOrLeft{ get; set; }
         public string MessageForVisual { get => messageForVisual; set { messageForVisual = value; OnPropertyChanged(); } }
     }

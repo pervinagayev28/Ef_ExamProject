@@ -35,3 +35,4 @@ C:\Users\user\Desktop\Ef_ExamProject\ChatAppService\obj\Debug\net6.0\ChatAppServ
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppService\obj\Debug\net6.0\refint\ChatAppService.dll
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppService\obj\Debug\net6.0\ChatAppService.pdb
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppService\obj\Debug\net6.0\ref\ChatAppService.dll
+C:\Users\user\Desktop\Ef_ExamProject\ChatAppService\obj\Debug\net6.0\ChatAppService.sourcelink.json

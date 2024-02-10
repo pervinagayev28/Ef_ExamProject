@@ -731,3 +731,4 @@ C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\Ma
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\classic-hamburger-stock-photo-isolated-260nw-2282033179.webp
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\image (1).jpg
 C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\bin\Debug\net7.0-windows\Images\UsersDb2.sql
+C:\Users\user\Desktop\Ef_ExamProject\Whatsapp\obj\Debug\net7.0-windows\Whatsapp.sourcelink.json

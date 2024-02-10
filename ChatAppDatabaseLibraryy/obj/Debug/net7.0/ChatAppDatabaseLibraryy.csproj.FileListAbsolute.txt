@@ -56,3 +56,4 @@ C:\Users\user\Desktop\Ef_ExamProject\ChatAppDatabaseLibraryy\obj\Debug\net7.0\re
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppDatabaseLibraryy\obj\Debug\net7.0\ChatAppDatabaseLibraryy.pdb
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppDatabaseLibraryy\obj\Debug\net7.0\ChatAppDatabaseLibraryy.genruntimeconfig.cache
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppDatabaseLibraryy\obj\Debug\net7.0\ref\ChatAppDatabaseLibraryy.dll
+C:\Users\user\Desktop\Ef_ExamProject\ChatAppDatabaseLibraryy\obj\Debug\net7.0\ChatAppDatabaseLibraryy.sourcelink.json

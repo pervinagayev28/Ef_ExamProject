@@ -44,3 +44,4 @@ C:\Users\user\Desktop\Ef_ExamProject\ChatAppModelsLibrary\obj\Debug\net6.0\ChatA
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppModelsLibrary\obj\Debug\net6.0\refint\ChatAppModelsLibrary.dll
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppModelsLibrary\obj\Debug\net6.0\ChatAppModelsLibrary.pdb
 C:\Users\user\Desktop\Ef_ExamProject\ChatAppModelsLibrary\obj\Debug\net6.0\ref\ChatAppModelsLibrary.dll
+C:\Users\user\Desktop\Ef_ExamProject\ChatAppModelsLibrary\obj\Debug\net6.0\ChatAppModelsLibrary.sourcelink.json

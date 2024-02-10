@@ -159,7 +159,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
             ChangeColorCommand = new Command(ExecuteChangeColorCommand);
             SelectedUserStatusCommand = new Command(ExecutSelectedUserStatusCommand);
 
-            //Async Commands Initialize
+            //Async Commands Initialize5
             OnlyChatUsersCommand = new CommandAsync(ExecuteOnlyChatUsersCommandAsync, CanExecuteOnlyChatUsersCommand);
             GetGroupsCommand = new CommandAsync(ExecuteGetGroupsCommandAsync, CanExecuteGetGroupsCommandAsync);
             DeleteCommand = new CommandAsync(ExecuteDeleteCommand, CanExecuteDeleteCommand);
@@ -567,7 +567,7 @@ namespace Whatsapp.ViewModels.ViewModelsPage
                                         .Where(gm => gm.GroupId == currentId)
                                         .Select(gm => new GroupMessageDto
                                         {
-                                            From = new User() { Gmail = gm.From.Gmail },
+                                            From =  UserMapper.Map<UserDto>(new User() { Gmail = gm.From.Gmail }),
                                             Message = gm.Message,
                                             RightOrLeft = gm.FromId == User.Id ? 1 : 0,
                                             Date = gm.Date,
